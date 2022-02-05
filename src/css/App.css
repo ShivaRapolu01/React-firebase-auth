@@ -12,7 +12,22 @@ body{
   background-color: #fafafa;
 }
 
+.auth-box{
+ width:70vw; 
+ max-width:430px; 
+ height:max-content;  
+ border: 2px solid red;
+}
 
-.App{
-  
+.buttons{
+  display:flex; 
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid black;
+  padding-top:10px; 
+  flex-wrap: wrap;
+
+}
+.buttons Button{
+  margin:4px; 
 }

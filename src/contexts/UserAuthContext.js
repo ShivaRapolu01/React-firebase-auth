@@ -6,6 +6,8 @@ import {
     signOut,
     onAuthStateChanged,
     GoogleAuthProvider,
+    GithubAuthProvider,
+    TwitterAuthProvider,
     signInWithPopup
 }  from 'firebase/auth'
 
@@ -32,6 +34,15 @@ export function UserAuthContextProvider({children}){
        const googleAuthProvider=new GoogleAuthProvider(); 
        return signInWithPopup(auth,googleAuthProvider);
    }
+   function githubSignIn(){
+    const githubAuthProvider=new GithubAuthProvider(); 
+    return signInWithPopup(auth,githubAuthProvider);
+   }
+   function twitterSignIn(){
+    const twitterAuthProvider=new TwitterAuthProvider(); 
+    return signInWithPopup(auth,twitterAuthProvider);
+   }
+   //NOTE THAT githubSignIn,twitterSignIn are not presently avaiable since they need
 
    useEffect(()=>{
      const unsubscribe=onAuthStateChanged(auth,(currentuser)=>{
@@ -44,7 +55,7 @@ export function UserAuthContextProvider({children}){
    },[])
 
    return (
-       <userAuthContext.Provider value={{user, signUp,logIn,logOut,googleSignIn}}>
+       <userAuthContext.Provider value={{user, signUp,logIn,logOut,googleSignIn,githubSignIn,twitterSignIn}}>
            {children}
        </userAuthContext.Provider>
    )
