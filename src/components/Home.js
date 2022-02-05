@@ -23,7 +23,7 @@ function Home() {
 
   return (
       <>
-       <div className='p-4 box mt-3 text-center'> Welcome! {user && user.email} You are at Home</div>
+       <div className='p-4 box mt-3 text-center'> Welcome! {user && user.displayName} You are at Home</div>
        {error && <Alert>{error}</Alert>}
        <div className='d-grid gap-2'>
            <Button variant='primary' onClick={handlelogOut}>Log out</Button>

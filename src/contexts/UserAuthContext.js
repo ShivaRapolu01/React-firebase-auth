@@ -3,12 +3,14 @@ import { createContext } from "react";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    updateProfile,
     signOut,
     onAuthStateChanged,
     GoogleAuthProvider,
     GithubAuthProvider,
     TwitterAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    sendPasswordResetEmail
 }  from 'firebase/auth'
 
 //TODO establish forgot password functinality . can use sendPasswordResetEmail from 'firebase/auth'
@@ -19,8 +21,11 @@ const userAuthContext=createContext();
 
 export function UserAuthContextProvider({children}){
   const [user,setUser]=useState(""); 
-   function signUp(email,password){
-       return createUserWithEmailAndPassword(auth,email,password); 
+   const signUp=async(email,password,name)=>{
+       return  await createUserWithEmailAndPassword(auth,email,password).then(()=>updateProfile(auth.currentUser,{
+           displayName:name,
+       })
+       );
    }
    function logIn(email,password){
     return signInWithEmailAndPassword(auth,email,password); 
@@ -28,6 +33,9 @@ export function UserAuthContextProvider({children}){
 
    function logOut(){
        return signOut(auth); 
+   }
+   function forgotPassword(email){
+        return sendPasswordResetEmail(auth,email);
    }
    
    function googleSignIn(){
@@ -42,7 +50,7 @@ export function UserAuthContextProvider({children}){
     const twitterAuthProvider=new TwitterAuthProvider(); 
     return signInWithPopup(auth,twitterAuthProvider);
    }
-   //NOTE THAT githubSignIn,twitterSignIn are not presently avaiable since they need
+   //TODO NOTE THAT githubSignIn,twitterSignIn are not presently avaiable since they need URL domain
 
    useEffect(()=>{
      const unsubscribe=onAuthStateChanged(auth,(currentuser)=>{
@@ -53,9 +61,12 @@ export function UserAuthContextProvider({children}){
      }
 
    },[])
-
+ 
+   const contextValue={
+    user, signUp,logIn,logOut,googleSignIn,githubSignIn,twitterSignIn,forgotPassword
+   }
    return (
-       <userAuthContext.Provider value={{user, signUp,logIn,logOut,googleSignIn,githubSignIn,twitterSignIn}}>
+       <userAuthContext.Provider value={contextValue}>
            {children}
        </userAuthContext.Provider>
    )
